@@ -28,7 +28,7 @@ end
 local function get_quality_icon(level)
     local quality_name = quality_names[level]
     if colors[quality_name] then
-        return {
+        local icons = {
             {
                 icon = "__infinite-quality-tiers__/graphics/icons/quality-pips-background.png",
                 icon_size = 64
@@ -39,9 +39,21 @@ local function get_quality_icon(level)
                 tint = get_color(quality_name)
             },
         }
+        local tech_icons = {
+            {
+                icon = "__infinite-quality-tiers__/graphics/technology/infinite-quality.png",
+                icon_size = 256,
+            },
+            {
+                icon = "__infinite-quality-tiers__/graphics/technology/quality-pips.png",
+                icon_size = 256,
+                tint = get_color(quality_name)
+            },
+        }
+        return icons, tech_icons
     end
 
-    return {
+    local icons = {
         {
             icon = "__infinite-quality-tiers__/graphics/icons/quality-pips-background.png",
             icon_size = 64
@@ -72,12 +84,44 @@ local function get_quality_icon(level)
             tint = get_color(quality_names[level - 4])
         }
     }
+    local tech_icons = {
+        {
+            icon = "__infinite-quality-tiers__/graphics/technology/infinite-quality.png",
+            icon_size = 256,
+        },
+        {
+            icon = "__infinite-quality-tiers__/graphics/technology/quality-pips-1.png",
+            icon_size = 256,
+            tint = get_color(quality_names[level - 0])
+        },
+        {
+            icon = "__infinite-quality-tiers__/graphics/technology/quality-pips-2.png",
+            icon_size = 256,
+            tint = get_color(quality_names[level - 1])
+        },
+        {
+            icon = "__infinite-quality-tiers__/graphics/technology/quality-pips-3.png",
+            icon_size = 256,
+            tint = get_color(quality_names[level - 2])
+        },
+        {
+            icon = "__infinite-quality-tiers__/graphics/technology/quality-pips-4.png",
+            icon_size = 256,
+            tint = get_color(quality_names[level - 3])
+        },
+        {
+            icon = "__infinite-quality-tiers__/graphics/technology/quality-pips-5.png",
+            icon_size = 256,
+            tint = get_color(quality_names[level - 4])
+        }
+    }
+    return icons, tech_icons
 end
 
-for level = 6, 999 do
+for level = 5, 999 do
     local quality_name = quality_names[level]
     if not quality_name then break end
-    local icons = get_quality_icon(level)
+    local icons, tech_icons = get_quality_icon(level)
     local color = get_color(quality_name)
     
     local quality = {
@@ -87,7 +131,7 @@ for level = 6, 999 do
         icons = icons,
         draw_sprite_by_default = true,
         color = color,
-        next = quality_names[level - 1],
+        next = quality_names[level + 1],
         next_probability = 0.1,
         order = "f" .. string.format("%03d", level),
         beacon_power_usage_multiplier = 1 / 6 / (level - 4),
@@ -98,12 +142,19 @@ for level = 6, 999 do
         quality.science_pack_drain_multiplier = (1 / 100) / (level - 98)
     end
 
+    local technology_localised_name
+    if 167 <= level and level <= 247 then
+        technology_localised_name = {"quality-name." .. quality_name}
+    else
+        technology_localised_name = {"technology-name.infinite-quality", {"quality-name." .. quality_name}}
+    end
+
     local technology = {
         type = "technology",
-        name = quality_name .. "-quality",
-        localised_name = {"technology-name.infinite-quality", {"quality-name." .. quality_name}},
-        icon = data.raw.technology["legendary-quality"].icon,
-        icon_size = data.raw.technology["legendary-quality"].icon_size,
+        name = quality_name .. "-infinite-quality",
+        localised_name = technology_localised_name,
+        icons = tech_icons,
+        enabled = level == 5,
         effects = {
             {
                 type = "unlock-quality",
@@ -111,7 +162,7 @@ for level = 6, 999 do
             }
         },
         unit = {
-            count = (1.10 ^ level * 100000),
+            count = (10000 * (level - 5)) + (1.05 ^ (level - 5) * 10000),
             ingredients = {
                 {"automation-science-pack",      1},
                 {"logistic-science-pack",        1},
@@ -128,7 +179,7 @@ for level = 6, 999 do
             },
             time = 120
         },
-        prerequisites = level == 5 and {"promethium-science-pack", "legendary-quality"} or {quality_names[level - 1] .. "-quality"},
+        prerequisites = level == 5 and {"promethium-science-pack", "legendary-quality"} or {quality_names[level - 1] .. "-infinite-quality"},
         order = "f" .. string.format("%03d", level)
     }
 
@@ -141,3 +192,4 @@ legendary.next = "mythic"
 legendary.beacon_power_usage_multiplier = 2 / 6
 legendary.mining_drill_resource_drain_multiplier = 2 / 6
 legendary.science_pack_drain_multiplier = 96 / 100
+legendary.next_probability = 0.1
