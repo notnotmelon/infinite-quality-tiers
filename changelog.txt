@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-10-17
+  Features:
+    - DO NOT DOWNLOAD THIS MOD
+    - Increase the level of next_probability to make getting to the higher qualities feasible
+  Graphics:
+    - Add thumbnail
+    - Improve tech icon graphics
+  Locale:
+    - Adjust quality names
