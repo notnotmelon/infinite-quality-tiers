@@ -149,6 +149,13 @@ for level = 5, 999 do
         technology_localised_name = {"technology-name.infinite-quality", {"quality-name." .. quality_name}}
     end
 
+    local tech_prereqs
+    if mods["space-age"] then
+        tech_prereqs = level == 5 and {"promethium-science-pack", "legendary-quality"} or {quality_names[level - 1] .. "-infinite-quality"}
+    else
+        tech_prereqs = level == 5 and {"space-science-pack", "legendary-quality"} or {quality_names[level - 1] .. "-infinite-quality"}
+    end
+
     local technology = {
         type = "technology",
         name = quality_name .. "-infinite-quality",
@@ -163,7 +170,7 @@ for level = 5, 999 do
         },
         unit = {
             count = (10000 * (level - 5)) + (1.05 ^ (level - 5) * 10000),
-            ingredients = {
+            ingredients = mods["space-age"] and {
                 {"automation-science-pack",      1},
                 {"logistic-science-pack",        1},
                 {"military-science-pack",        1},
@@ -176,10 +183,18 @@ for level = 5, 999 do
                 {"agricultural-science-pack",    1},
                 {"cryogenic-science-pack",       1},
                 {"promethium-science-pack",      1}
+            } or {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"military-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
+                {"space-science-pack", 1}
             },
             time = 120
         },
-        prerequisites = level == 5 and {"promethium-science-pack", "legendary-quality"} or {quality_names[level - 1] .. "-infinite-quality"},
+        prerequisites = tech_prereqs,
         order = "f" .. string.format("%03d", level)
     }
 
