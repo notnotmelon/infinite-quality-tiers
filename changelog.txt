@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024-10-30
+  Bugfixes:
+    - Fixed crash when running with just the quality mod: no space age.
+    - The "marvelous" quality no longer shares a color with mythic.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024-10-17
   Bugfixes:
