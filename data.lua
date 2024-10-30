@@ -6,7 +6,6 @@ local colors = {
     ["divine"] = {166, 0, 255},
     ["exalted"] = {255, 255, 255},
     ["supreme"] = {255, 0, 0},
-    ["marvelous"] = {255, 0, 237},
     ["reality-bending"] = {0, 0, 0}
 }
 
